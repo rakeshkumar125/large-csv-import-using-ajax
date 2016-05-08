@@ -3,12 +3,8 @@
 	$hostname="localhost";
 	$username = "root";
 	$password="";
-	$dbh = new PDO("mysql:host=$hostname;dbname=intranet_new", $username, $password);
-/*	foreach ($_POST['form_data'] as $row) {
-		add_post($dbh,$row);
-	}
-*/
-//print_r($_POST['data'][0]);
+	$dbh = new PDO("mysql:host=$hostname;dbname=databasename", $username, $password);
+
 $data = $_POST['data'];
 add_post($dbh,$data);
 	function add_post($dbh,$data){
@@ -19,7 +15,7 @@ add_post($dbh,$data);
 			
 			$row = $data;
 					 
-								$sth1 = $dbh->prepare("INSERT INTO `intranet_posts` (
+								$sth1 = $dbh->prepare("INSERT INTO `wpprefix_posts` (
 										`post_author`
 										,`post_title`
 										,`post_type`
@@ -50,14 +46,14 @@ add_post($dbh,$data);
 			$sth1->execute();	
 			$post_id = $dbh->lastInsertId();
 			
-			$sth2 = $dbh->prepare("UPDATE intranet_postsset
+			$sth2 = $dbh->prepare("UPDATE wpprefixt_postsset
 						SET post_name = CONCAT (
 								REPLACE(lower(post_title), ' ', '-')
 								,'-'
 								,id
 								)
 							,guid = CONCAT (
-								'http://sun355/intranet/?villa='
+								'server_url'
 								,lower(post_title)
 								,'-'
 								,id
@@ -67,7 +63,7 @@ add_post($dbh,$data);
 			$sth2->execute();
 			unset($row[0]);
 
-					$sql = "INSERT INTO intranet_postmeta (`post_id`, `meta_key`, `meta_value`) VALUES ";
+					$sql = "INSERT INTO wpprefix_postmeta (`post_id`, `meta_key`, `meta_value`) VALUES ";
 					$final_array =array_combine($custom_field_array, $row);
 				
 					foreach($final_array as $key => $value){
