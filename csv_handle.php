@@ -5,7 +5,7 @@
 		$username = "root";
 		$password="";
 		
-		$dbh = new PDO("mysql:host=$hostname;dbname=intranet_new", $username, $password);
+		$dbh = new PDO("mysql:host=$hostname;dbname=database_name", $username, $password);
 		
 		//delete all post 
 		delete_post($dbh);
@@ -90,7 +90,7 @@ die;
 			
 			foreach($data as $row){
 					 
-								$sth1 = $dbh->prepare("INSERT INTO `intranet_posts` (
+								$sth1 = $dbh->prepare("INSERT INTO `wpprefix_posts` (
 										`post_author`
 										,`post_title`
 										,`post_type`
@@ -121,14 +121,14 @@ die;
 			$sth1->execute();	
 			$post_id = $dbh->lastInsertId();
 			
-			$sth2 = $dbh->prepare("UPDATE intranet_postsset
+			$sth2 = $dbh->prepare("UPDATE wpprefix_postsset
 						SET post_name = CONCAT (
 								REPLACE(lower(post_title), ' ', '-')
 								,'-'
 								,id
 								)
 							,guid = CONCAT (
-								'http://sun355/intranet/?villa='
+								'server_url'
 								,lower(post_title)
 								,'-'
 								,id
@@ -159,15 +159,15 @@ die;
 		function delete_post($dbh){
 			// $count = $dbh->exec("INSERT INTO animals(animal_type, animal_name) VALUES ('kiwi', 'troy')");
 
-     		$sth = $dbh->prepare("select id from intranet_posts where post_type='villa'");
+     		$sth = $dbh->prepare("select id from wpprefix_posts where post_type='post_type'");
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_COLUMN, 0);
 			$id =  implode(",",$result);
 			
-			$sth1 = $dbh->prepare("delete from intranet_posts where id in(".$id.")");
+			$sth1 = $dbh->prepare("delete from wpprefix_posts where id in(".$id.")");
 			$sth1->execute();	
 
-			$sth2 = $dbh->prepare("delete from intranet_postmeta where post_id in(".$id.")");
+			$sth2 = $dbh->prepare("delete from wpprefix_postmeta where post_id in(".$id.")");
 			$sth2->execute();
 			$dbh = null;
 		}
