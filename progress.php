@@ -13,7 +13,7 @@ $(document).ready(function (e){
 $("#uploadForm").on('submit',(function(e){
 		e.preventDefault();
 				$.ajax({
-					url: "http://sun355/intranet/csv_handle.php",
+					url: url,
 					type: "POST",
 					data:  new FormData(this),
 					contentType: false,
@@ -33,7 +33,7 @@ var toRequest;
 function process_file(file_data){
 var total_records = file_data[1];
 for(i=0; i<file_data[0].length; i++){
-	var file_name = "http://sun355/intranet/"+file_data[0][i]['file'];
+	var file_name = "server_url"+file_data[0][i]['file'];
 //	console.log(file_name);
 	$.getJSON(file_name).done(function(data_reponse){
 	toRequest=data_reponse;
@@ -52,23 +52,7 @@ function doRequest(index) {
 
 
 var data = toRequest[index];
-	//console.log(data);
-/*  $.ajax({
-    url:"http://sun355/intranet/csv_add.php",
-    type:"POST",
-    data:data,
-    async:true,
-    success: function(data){        
-      //do whatever you want do do
-		console.log(data);
-      if (index+1<toRequest.length) {
-        doRequest(index+1);
-      }
-    }
-  }); */
-
-
-  $.post("http://sun355/intranet/csv_add.php", {data:data}, "json").done(function(data_r){
+$.post("server_url", {data:data}, "json").done(function(data_r){
 
   		var counter = ((index/toRequest.length)*100);
   		  //console.log(counter);
